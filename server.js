@@ -9,6 +9,17 @@ const File = require("./models/file");
 const { v4: uuid4 } = require("uuid");
 const cors = require("cors");
 
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+  res.setHeader("Access-Control-Allow-Headers", "GET, POST, PATCH, DELETE");
+
+  next();
+});
+
 let storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, "uploads/"),
   filename: (req, file, cb) => {
@@ -59,10 +70,10 @@ app.post("/", (req, res) => {
 });
 
 // Cors
-const corsOptions = {
-  origin: process.env.ALLOWED_CLIENTS.split(","),
-  // ['http://localhost:3000', 'http://localhost:5000', 'http://localhost:3300']
-};
+// const corsOptions = {
+//   origin: process.env.ALLOWED_CLIENTS.split(","),
+//   // ['http://localhost:3000', 'http://localhost:5000', 'http://localhost:3300']
+// };
 
 // Default configuration looks like
 // {
@@ -72,7 +83,7 @@ const corsOptions = {
 //     "optionsSuccessStatus": 204
 //   }
 
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
 app.use(express.static("public"));
 
 const connectDB = require("./config/db");
